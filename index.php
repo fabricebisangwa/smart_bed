@@ -1,64 +1,121 @@
-<?php
-require 'db.php';
-session_start();
-$sql = 'SELECT * FROM people';
-$statement = $connection->prepare($sql);
-$statement->execute();
-$people = $statement->fetchAll(PDO::FETCH_OBJ);
- ?>
- <?php
-if (isset($_GET['active'])) {
-  $id = $_GET['active'];
-$sql = 'UPDATE people SET `status`="Active" WHERE id=:id';
-$statement = $connection->prepare($sql);
-if ($statement->execute([':id' => $id])) {
-      $sql = 'UPDATE people SET `status`="Disactive" WHERE id!=:id';
-      $statement = $connection->prepare($sql);
-      if ($statement->execute([':id' => $id])) {
-        header("Location: index.php");
-      }
-}
-}
-?>
-<?php require 'header.php'; ?>
-<div class="container">
-  <div class="card mt-5">
-    <div class="card-header">
-      <h2>All people</h2>
+<?php session_start(); ?>
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords"
+        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Matrix lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Matrix admin lite design, Matrix admin lite dashboard bootstrap 5 dashboard template" />
+    <meta name="description"
+        content="Matrix Admin Lite Free Version is powerful and clean admin dashboard template, inpired from Bootstrap Framework" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Baby</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png" />
+    <!-- Custom CSS -->
+    <link href="assets/libs/flot/css/float-chart.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="dist/css/style.min.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<?php if(isset($_SESSION['error'])) {?>
+<?php echo $_SESSION['error']; ?>
+<?php unset($_SESSION['error']); ?>
+<?php } ?>
+<?php if(isset($_SESSION['msg'])) {?>
+<?php echo $_SESSION['msg']; ?>
+<?php unset($_SESSION['msg']); ?>
+<?php } ?>
+    <div class="main-wrapper">
+
+        <div class="
+          auth-wrapper
+          d-flex
+          no-block
+          justify-content-center
+          align-items-center
+          bg-dark
+        ">
+            <div class="auth-box bg-dark border-top border-secondary">
+                <div id="loginform">
+                    <div class="text-center pt-3 pb-3">
+                        <h3>Admin</h3>
+                    </div>
+                    <!-- Form -->
+                    <form class="form-horizontal mt-3" method="post" action="admin.php">
+                        <div class="row pb-4">
+                            <div class="col-12">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-dark text-white h-100" id="basic-addon1"><i
+                                                class="mdi mdi-account fs-4"></i></span>
+                                    </div>
+                                    <input type="text" name="username" class="form-control form-control-lg" placeholder="Username"
+                                        aria-label="Username" aria-describedby="basic-addon1" required="" />
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-dark text-white h-100" id="basic-addon2"><i
+                                                class="mdi mdi-lock fs-4"></i></span>
+                                    </div>
+                                    <input name="password" type="password" class="form-control form-control-lg" placeholder="Password"
+                                        aria-label="Password" aria-describedby="basic-addon1" required="" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row border-top border-secondary">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <div class="pt-3">
+
+                                        <button class="btn btn-success float-end text-white" type="submit">
+                                            Login
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+   
     </div>
-    <div class="card-body">
-      <table class="table table-bordered">
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Phone Number</th>
-          <th>Active number</th>
-          <th>Action</th>
-        </tr>
-        <?php  $count = 1; ?>
-        <?php foreach($people as $person):
-          ?>
-          <tr>
-            <td><?= $count; ?></td>
-            <td><?= $person->name; ?></td>
-            <td><?= $person->mobile; ?></td>
-            <td><?php if($person->status == 'Active'){ ?>
-              <a onclick="return confirm('you want change recieve?')" href="?active=<?= $person->id ?>" class='btn btn-sm btn-primary'>Active</a>
-            <?php } 
-            else{?>
-            <a onclick="return confirm('you want change recieve?')" href="?active=<?= $person->id ?>" class='btn btn-sm btn-danger'>Disactive</a>
-            <?php } ?>
-            </td>
-            <td>
-              <a href="edit.php?id=<?= $person->id ?>" class='btn btn-sm btn-success'>edit</a>
-              <a onclick="return confirm('Are you sure you want to delete this entry?')" href="delete.php?id=<?= $person->id ?>" class='btn btn-sm btn-danger'>Delete</a>
-            </td>
-          </tr>
-        <?php
-          $count++;
-      endforeach; ?>
-      </table>
-    </div>
-  </div>
-</div>
-<?php require 'footer.php'; ?>
+  
+    <!-- ============================================================== -->
+    <!-- All Required js -->
+    <!-- ============================================================== -->
+    <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- This page plugin js -->
+    <!-- ============================================================== -->
+    <script>
+        $(".preloader").fadeOut();
+        // ==============================================================
+        // Login and Recover Password
+        // ==============================================================
+        $("#to-recover").on("click", function () {
+            $("#loginform").slideUp();
+            $("#recoverform").fadeIn();
+        });
+        $("#to-login").click(function () {
+            $("#recoverform").hide();
+            $("#loginform").fadeIn();
+        });
+    </script>
+</body>
+
+</html>
