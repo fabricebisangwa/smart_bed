@@ -142,7 +142,7 @@ if (!isset($_SESSION['admin']) or empty($_SESSION['admin'])) {
                     </tr>
                   </thead>
                   <?php
-                  $sql = 'SELECT * FROM `customer`';
+                  $sql = 'SELECT * FROM `customer` WHERE belong=0';
                   $statement = $connection->prepare($sql);
                   $statement->execute();
                   $People = $statement->fetchAll(PDO::FETCH_OBJ);
@@ -217,12 +217,12 @@ if (!isset($_SESSION['admin']) or empty($_SESSION['admin'])) {
               <div class="form-group">
                 <label>Username
                   <small class="text-muted">Unique Username</small></label>
-                <input type="text" class="form-control" name="address" required id="purchase-mask"  value="<?= $client->username; ?>" />
+                <input type="text" class="form-control" name="username" required id="purchase-mask"  value="<?= $client->username; ?>" />
               </div>
               <div class="form-group">
                 <label>Password
                   <small class="text-muted">Secret key</small></label>
-                <input type="password" class="form-control" name="address" required id="purchase-mask"  value="<?= $client->password; ?>" />
+                <input type="password" class="form-control" name="password" required id="purchase-mask"  value="<?= $client->password; ?>" />
               </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-success text-white">
@@ -246,7 +246,7 @@ if (!isset($_SESSION['admin']) or empty($_SESSION['admin'])) {
               <div class="form-group">
                 <label>Phone
                   <small class="text-muted">(999) 999-9999</small></label>
-                <input type="text" class="form-control" name="mobile" required
+                <input type="text" maxlength="10"  class="form-control" name="mobile" required
                   placeholder="Enter Phone Number" />
               </div>
 
@@ -259,12 +259,12 @@ if (!isset($_SESSION['admin']) or empty($_SESSION['admin'])) {
               <div class="form-group">
                 <label>Username
                   <small class="text-muted">Username </small></label>
-                <input type="text" class="form-control" name="address" required id="purchase-mask" placeholder="Enter Home Address" />
+                <input type="text" class="form-control" name="username" required id="purchase-mask" placeholder="Enter Home Address" />
               </div>
               <div class="form-group">
                 <label>Password
                   <small class="text-muted">Secret keys</small></label>
-                <input type="text" class="form-control" name="address" required id="purchase-mask" placeholder="Enter Home Address" />
+                <input type="password" class="form-control" name="password" required id="purchase-mask" placeholder="Enter Home Address" />
               </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-success text-white">
