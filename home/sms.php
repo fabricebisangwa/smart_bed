@@ -1,23 +1,12 @@
 <?php
-session_start();
 require '../connection.php';
-$sql = 'SELECT * FROM customer WHERE belong=? AND `status`="Active"';
+$sql = 'SELECT * FROM customer WHERE `status`="Active"';
 $statement = $connection->prepare($sql);
-$statement->execute([$_SESSION['parent']]);
-$row = $statement->rowCount();
-
-if ($row > 0) {    
+$statement->execute();  
 $person = $statement->fetch(PDO::FETCH_OBJ);
+
 $names = $person->names;
 $num = $person->mobile;
-} else {
-        $sql = 'SELECT * FROM customer WHERE id=?';
-        $statement = $connection->prepare($sql);
-        $statement->execute([$_SESSION['parent']]);
-        $person = $statement->fetch(PDO::FETCH_OBJ);
-$names = $person->names;
-$num = $person->mobile;
-}
  ?>
 
 <?php

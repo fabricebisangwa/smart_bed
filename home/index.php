@@ -12,9 +12,9 @@ if (isset($_GET['active'])) {
 $sql = 'UPDATE customer SET `status`="Active" WHERE id=?';
 $statement = $connection->prepare($sql);
 if ($statement->execute([$id])) {
-      $sql = 'UPDATE customer SET `status`="Disactive" WHERE id!=? AND belong=?';
+      $sql = 'UPDATE customer SET `status`="Disactive" WHERE id!=?';
       $statement = $connection->prepare($sql);
-      if ($statement->execute([$id,$_SESSION['parent']])) {
+      if ($statement->execute([$id])) {
         header("Location: index.php");
       }
 }
@@ -26,7 +26,11 @@ if (isset($_GET['disactive'])) {
 $sql = 'UPDATE customer SET `status`="Disactive" WHERE id=?';
 $statement = $connection->prepare($sql);
 if($statement->execute([$id])){
+  $sql = 'UPDATE customer SET `status`="Active" WHERE id=?';
+$statement = $connection->prepare($sql);
+if($statement->execute([$_SESSION['parent']])){
   header("Location: index.php");
+}
 }
 }
 ?>
